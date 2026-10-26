@@ -1,4 +1,4 @@
-# Subscription Reminder Bot — button version (Vercel)
+# Subscription Reminder Bot — button version (Vercel, multi-user)
 
 A Telegram bot you control with **buttons** that tracks all your subscriptions (any platform,
 any email) and reminds you:
@@ -98,6 +98,27 @@ Prefer typing? These still work: `/add Netflix | 20/10/2026 | monthly | me@gmail
 `/expired`, `/soon`, `/active`, `/paid Netflix`, `/cost Netflix 5000`, `/cost Spotify $12`, `/list`, `/help`, `/cancel`.
 
 ---
+
+## Sharing the bot with others
+
+The bot is open to everyone. Each person who taps **Start** gets their own private list,
+reminders, HR number and name — nobody can see anyone else's subscriptions.
+
+- **Your link:** `https://t.me/<your bot's username>` (shown on the `/api/setup` page).
+  The menu also has a **📣 Invite a friend** button.
+- **Make it searchable:** Telegram search finds bots by username and name, so a clear name
+  (e.g. *Subscription Reminder*) helps. Change it with @BotFather → `/setname`, and add a
+  profile photo with `/setuserpic`.
+- **Each user sets their own** HR number and name under **⚙️ Settings**. Your `SIGN_NAME`
+  and `HR_WHATSAPP` from Vercel apply only to you.
+- **/stats** (only you) shows how many people use the bot.
+- Anyone can wipe their data with **⚙️ Settings → 🗑 Delete all my data**.
+- The bot only works in private chats, not groups.
+
+**Responsibility:** other people's subscription names, emails and HR numbers are stored in
+your Upstash database. Keep your Vercel and Upstash accounts secure, and don't look at or
+share other users' data. Vercel's free Hobby plan is for **personal, non-commercial use**;
+if you start charging people, move to a paid plan.
 
 ## Good to know
 - Only your chat ID can use the bot; anyone else is ignored.

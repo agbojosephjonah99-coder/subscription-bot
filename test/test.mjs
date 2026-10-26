@@ -42,7 +42,7 @@ assert.throws(() => parseDate("31/02/2026", "2026-10-26"));
 
 // --- menu
 let l = await type("/start");
-assert.match(texts(l), /tracking 0 subscriptions/);
+assert.match(texts(l), /Welcome to Subscription Reminder/);
 assert.ok(findBtn(l, "Add subscription"));
 
 // --- step-by-step add with buttons
