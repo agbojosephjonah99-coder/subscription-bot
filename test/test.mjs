@@ -185,4 +185,49 @@ assert.equal(l.filter((x) => x.method !== "answerCallbackQuery").length, 0);
 l = await tap("p:zzzzzz");
 assert.match(texts(l), /no longer exists/);
 
+// --- currencies
+// add with currency button
+await tap("add");
+await type("ChatGPT Plus");
+await tap("ad:today");
+await tap("ac:monthly");
+await tap("askip");
+l = await tap("acur:USD");
+assert.match(texts(l), /in \$\?/);
+l = await type("20");
+assert.match(texts(l), /Amount: \$20/);
+const gpt = state.subs.find((s) => s.name === "ChatGPT Plus");
+assert.equal(gpt.currency, "USD");
+
+// add by typing the sign directly
+await tap("add");
+await type("Figma");
+await tap("ad:today");
+await tap("ac:monthly");
+await tap("askip");
+l = await type("€15");
+assert.match(texts(l), /Amount: €15/);
+
+// change amount keeps currency, or switches via button
+l = await tap(`c:${gpt.id}`);
+assert.match(texts(l), /Current amount for ChatGPT Plus: \$20/);
+assert.ok(findBtn(l, "€ Euro"));
+await type("25");
+assert.equal(gpt.cost, 25); assert.equal(gpt.currency, "USD");
+await tap(`c:${gpt.id}`);
+l = await tap(`cc:${gpt.id}:NGN`);
+assert.match(texts(l), /amount in ₦/);
+l = await type("32,000");
+assert.match(texts(l), /updated to ₦32,000/);
+assert.equal(gpt.currency, "NGN");
+l = await type("/cost chatgpt $25");
+assert.match(texts(l), /updated to \$25/);
+
+// HR message uses the right currency
+await tap(`h:${gpt.id}`);
+assert.match(texts(log), /Plan cost: \$25/);
+
+// old subscriptions without a currency default to Naira
+assert.match(texts(await tap(`s:${nf.id}`)), /Amount: ₦5,200/);
+
 console.log("✅ All tests passed");
