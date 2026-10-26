@@ -230,4 +230,51 @@ assert.match(texts(log), /Plan cost: \$25/);
 // old subscriptions without a currency default to Naira
 assert.match(texts(await tap(`s:${nf.id}`)), /Amount: ₦5,200/);
 
+// --- reports
+{
+  const env2 = { TELEGRAM_CHAT_ID: String(CHAT) };
+  const st = emptyState(env2);
+  const out = [];
+  const tg2 = async (m, p) => { out.push({ method: m, ...p }); return { ok: true }; };
+  const now2 = at("2026-10-26");
+  const T = (t) => handleUpdate(st, { message: { chat: { id: CHAT }, text: t } }, tg2, env2, now2);
+  const C = (d) => handleUpdate(st, { callback_query: { id: "q", data: d, message: { chat: { id: CHAT }, message_id: 9 } } }, tg2, env2, now2);
+  await T("/add Netflix | 20/09/2026 | monthly | a@gmail.com | 4400");      // due 20 Oct -> expired 6d
+  await T("/add Spotify | 24/09/2026 | monthly | | 1900");                   // due 24 Oct -> expired 2d
+  await T("/add Claude | 26/09/2026 | monthly | b@gmail.com | $149.63");    // due TODAY
+  await T("/add Canva | 29/10/2025 | yearly | | €110");                      // due 29 Oct -> 3 days
+  await T("/add DStv | 15/10/2026 | monthly | | 15700");                     // due 15 Nov -> 20 days
+
+  out.length = 0; await C("rx");
+  let t = out.find((x) => x.text).text;
+  assert.match(t, /Expired \(not yet renewed\) \(2\)/);
+  assert.match(t, /1\. 🔴 Netflix — expired 6 days ago/);
+  assert.match(t, /2\. 🔴 Spotify — expired 2 days ago/);
+  assert.match(t, /Total to renew: ₦6,300/);
+  assert.doesNotMatch(t, /Claude|Canva|DStv/);
+
+  out.length = 0; await C("rs");
+  t = out.find((x) => x.text).text;
+  assert.match(t, /Due in 5 days or less \(2\)/);
+  assert.match(t, /1\. 🟡 Claude — expires TODAY[\s\S]*\$149\.63/);
+  assert.match(t, /2\. 🟡 Canva — 3 days left/);
+  assert.match(t, /Total due soon: \$149\.63 \+ €110|Total due soon: €110 \+ \$149\.63/);
+  assert.doesNotMatch(t, /Netflix|DStv/);
+
+  out.length = 0; await C("ra");
+  t = out.find((x) => x.text).text;
+  assert.match(t, /Active subscriptions \(3\)/);
+  assert.match(t, /🟢 DStv — 20 days left/);
+  assert.doesNotMatch(t, /Netflix|Spotify/);
+  const kb = out.find((x) => x.text).reply_markup.inline_keyboard.flat().map((b) => b.text);
+  assert.ok(kb.includes("Claude") && kb.includes("⬅️ Menu"));
+
+  out.length = 0; await T("/expired");
+  assert.match(out.find((x) => x.text).text, /Netflix/);
+  const empty = emptyState(env2); out.length = 0;
+  await handleUpdate(empty, { callback_query: { id: "q", data: "rx", message: { chat: { id: CHAT }, message_id: 9 } } }, tg2, env2, now2);
+  assert.match(out.find((x) => x.text).text, /Nothing has expired/);
+  if (VERBOSE) for (const k of ["rx", "rs", "ra"]) { out.length = 0; await C(k); console.log("\n" + out.find((x) => x.text).text); }
+}
+
 console.log("✅ All tests passed");

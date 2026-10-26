@@ -82,6 +82,11 @@ name → last payment date (**Today** / **Yesterday** / type a date) → billing
 | 📲 Send to HR | Get the HR message with the WhatsApp button any time |
 | 🗑 Remove | Stop tracking it (asks you to confirm) |
 
+**Quick reports** (one message each, with money totals per currency):
+- **🔴 Expired** — everything expired and not yet renewed, with how many days ago
+- **🟡 Due in ≤5 days** — what needs paying soon, including today
+- **🟢 Active (days left)** — everything still running, with days left
+
 **📞 HR WhatsApp number** — set or change HR's number.
 
 **On expiry day** you get the reminder plus the HR message. If the price changed, tap
@@ -90,7 +95,7 @@ Then tap **📲 Send to HR on WhatsApp**: WhatsApp opens on HR's chat with the m
 and you just press send.
 
 Prefer typing? These still work: `/add Netflix | 20/10/2026 | monthly | me@gmail.com | 4400`,
-`/paid Netflix`, `/cost Netflix 5000`, `/cost Spotify $12`, `/list`, `/help`, `/cancel`.
+`/expired`, `/soon`, `/active`, `/paid Netflix`, `/cost Netflix 5000`, `/cost Spotify $12`, `/list`, `/help`, `/cancel`.
 
 ---
 
