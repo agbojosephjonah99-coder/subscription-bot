@@ -1,5 +1,6 @@
 // Open https://<your-project>.vercel.app/api/setup once to connect Telegram to this bot.
 import { checkStore } from "../lib/store.js";
+import { MENU_KB } from "../lib/core.js";
 import { makeTg, webhookSecret } from "../lib/telegram.js";
 
 const page = (title, lines) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -32,17 +33,16 @@ export default async function handler(req, res) {
   await tg("setMyCommands", { commands: [
     { command: "menu", description: "Open the main menu" },
     { command: "list", description: "My subscriptions" },
+    { command: "expired", description: "All expired subscriptions" },
+    { command: "soon", description: "Due in 5 days or less" },
+    { command: "active", description: "Active subscriptions with days left" },
     { command: "help", description: "How it works" },
     { command: "cancel", description: "Cancel what I'm doing" },
   ] });
   const hello = await tg("sendMessage", {
     chat_id: chatId,
     text: "✅ Your subscription bot is connected!\n\nTap ➕ Add subscription to get started.",
-    reply_markup: { inline_keyboard: [
-      [{ text: "➕ Add subscription", callback_data: "add" }],
-      [{ text: "📋 My subscriptions", callback_data: "list" }],
-      [{ text: "📞 HR WhatsApp number", callback_data: "hr" }, { text: "❓ Help", callback_data: "help" }],
-    ] },
+    reply_markup: { inline_keyboard: MENU_KB },
   });
   return res.status(200).send(page("✅ Connected!", [
     `Telegram now sends everything to <code>https://${host}/api/telegram</code>.`,
