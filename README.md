@@ -32,7 +32,7 @@ GitHub account and a free Vercel account.
 2. Click **Add New… → Project**, pick your `subscription-bot` repo → **Import**.
 3. Open **Environment Variables** on that same screen and add:
 
-   | Name | Value | 
+   | Name | Value |
    |---|---|
    | `TELEGRAM_BOT_TOKEN` | your bot token from @BotFather |
    | `TELEGRAM_CHAT_ID` | `5767935941` |
@@ -68,7 +68,8 @@ Everything is buttons. Send `/menu` anytime to bring the menu back.
 
 **➕ Add subscription** — the bot asks one question at a time:
 name → last payment date (**Today** / **Yesterday** / type a date) → billing cycle
-(**Weekly / Monthly / Quarterly / Yearly**) → email (**Skip** allowed) → amount in ₦ (**Skip** allowed)
+(**Weekly / Monthly / Quarterly / Yearly**) → email (**Skip** allowed) → amount: tap **₦ Naira**, **$ Dollar** or
+**€ Euro**, or just type it with the sign, e.g. `₦4,400`, `$15`, `€9.99` (**Skip** allowed)
 
 **📋 My subscriptions** — 🟢 fine · 🟡 due within 5 days · 🔴 expired. Tap one to:
 
@@ -76,7 +77,7 @@ name → last payment date (**Today** / **Yesterday** / type a date) → billing
 |---|---|
 | ✅ Paid today | Marks it renewed and confirms "🎉 … has been subscribed!" |
 | 📅 Paid on a date | Same, for a different payment date |
-| 💰 Change amount | Type the new price; it's used in the next HR message |
+| 💰 Change amount | Type the new price (keeps the same currency), or tap ₦ / $ / € to switch currency first |
 | ✏️ Edit details | Change name, email, billing cycle or last paid date |
 | 📲 Send to HR | Get the HR message with the WhatsApp button any time |
 | 🗑 Remove | Stop tracking it (asks you to confirm) |
@@ -89,7 +90,7 @@ Then tap **📲 Send to HR on WhatsApp**: WhatsApp opens on HR's chat with the m
 and you just press send.
 
 Prefer typing? These still work: `/add Netflix | 20/10/2026 | monthly | me@gmail.com | 4400`,
-`/paid Netflix`, `/cost Netflix 5000`, `/list`, `/help`, `/cancel`.
+`/paid Netflix`, `/cost Netflix 5000`, `/cost Spotify $12`, `/list`, `/help`, `/cancel`.
 
 ---
 
